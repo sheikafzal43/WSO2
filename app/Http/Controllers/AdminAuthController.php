@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 use Inertia\Inertia;
 
 class AdminAuthController extends Controller
@@ -18,7 +18,7 @@ class AdminAuthController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             return redirect()->route('admin');
         }
-        
+
         return Inertia::render('admin-login');
     }
 
@@ -39,8 +39,8 @@ class AdminAuthController extends Controller
         if ($user && $user->is_admin && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             $request->session()->regenerate();
-            
-            return redirect()->route('admin')->with('success', 'Welcome back, ' . $user->name . '!');
+
+            return redirect()->route('admin')->with('success', 'Welcome back, '.$user->name.'!');
         }
 
         return back()->withErrors([
@@ -54,10 +54,10 @@ class AdminAuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('admin.login')->with('success', 'You have been logged out successfully.');
     }
 }

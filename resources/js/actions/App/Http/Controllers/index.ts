@@ -1,9 +1,9 @@
-import DonationController from './DonationController'
-import AdminAuthController from './AdminAuthController'
+import AdminAuthController from './AdminAuthController';
+import DonationController from './DonationController';
 
 const Controllers = {
     DonationController,
     AdminAuthController,
-}
+};
 
-export default Controllers
+export default Controllers;

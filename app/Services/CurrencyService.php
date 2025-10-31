@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Log;
 class CurrencyService
 {
     protected string $apiKey;
+
     protected string $apiUrl;
+
     protected string $baseCurrency;
+
     protected int $cacheMinutes;
 
     public function __construct()
@@ -33,28 +36,29 @@ class CurrencyService
                 $response = Http::get($this->apiUrl, [
                     'apikey' => $this->apiKey,
                     'base_currency' => $this->baseCurrency,
-                    'currencies' => 'USD,EUR,GBP,INR'
+                    'currencies' => 'USD,EUR,GBP,INR',
                 ]);
 
                 if ($response->successful()) {
                     $data = $response->json();
-                    
+
                     return [
                         'success' => true,
                         'rates' => $data['data'] ?? [],
                         'base' => $this->baseCurrency,
-                        'last_updated' => now()->toIso8601String()
+                        'last_updated' => now()->toIso8601String(),
                     ];
                 }
 
                 Log::warning('Currency API request failed', [
                     'status' => $response->status(),
-                    'body' => $response->body()
+                    'body' => $response->body(),
                 ]);
 
                 return $this->getFallbackRates();
             } catch (\Exception $e) {
-                Log::error('Currency API error: ' . $e->getMessage());
+                Log::error('Currency API error: '.$e->getMessage());
+
                 return $this->getFallbackRates();
             }
         });
@@ -70,8 +74,8 @@ class CurrencyService
         }
 
         $rates = $this->getExchangeRates();
-        
-        if (!$rates['success']) {
+
+        if (! $rates['success']) {
             return $amount;
         }
 
@@ -80,6 +84,7 @@ class CurrencyService
 
         // Convert to base currency first, then to target currency
         $baseAmount = $amount / $fromRate;
+
         return round($baseAmount * $toRate, 2);
     }
 
@@ -98,7 +103,7 @@ class CurrencyService
             ],
             'base' => 'USD',
             'last_updated' => now()->toIso8601String(),
-            'fallback' => true
+            'fallback' => true,
         ];
     }
 
@@ -108,13 +113,13 @@ class CurrencyService
     public function getFormattedRates(): array
     {
         $data = $this->getExchangeRates();
-        
+
         $formatted = [];
         foreach ($data['rates'] as $code => $rate) {
             $formatted[$code] = [
                 'code' => $code,
                 'rate' => $rate['value'],
-                'symbol' => $this->getCurrencySymbol($code)
+                'symbol' => $this->getCurrencySymbol($code),
             ];
         }
 
@@ -126,7 +131,7 @@ class CurrencyService
      */
     protected function getCurrencySymbol(string $code): string
     {
-        return match($code) {
+        return match ($code) {
             'USD' => '$',
             'EUR' => '€',
             'GBP' => '£',

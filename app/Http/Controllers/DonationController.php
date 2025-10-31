@@ -14,11 +14,11 @@ class DonationController extends Controller
     public function index()
     {
         $donations = Donation::latest()->get();
-        
+
         return response()->json([
             'success' => true,
             'data' => $donations,
-            'count' => $donations->count()
+            'count' => $donations->count(),
         ]);
     }
 
@@ -38,7 +38,7 @@ class DonationController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -47,7 +47,7 @@ class DonationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Donation created successfully',
-            'data' => $donation
+            'data' => $donation,
         ], 201);
     }
 
