@@ -43,6 +43,13 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
+      - name: Create Storage Directories
+        run: |
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/views
+          mkdir -p storage/framework/sessions
+          chmod -R 775 storage bootstrap/cache
+
       - name: Build Assets
         run: npm run build
 
