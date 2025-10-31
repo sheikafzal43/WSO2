@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # PHP Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "5173:5173"  # Vite dev server
+    networks:
+      - laravel
+    depends_on:
+      - db
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel
+    depends_on:
+      - app
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: laravel_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - laravel
+
+  # PHPMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: laravel_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root_password
+      UPLOAD_LIMIT: 300M
+    ports:
+      - "8080:80"
+    networks:
+      - laravel
+    depends_on:
+      - db
+
+  # WSO2 API Manager
+  wso2apim:
+    image: wso2/wso2am:4.3.0
+    container_name: wso2_apim
+    restart: unless-stopped
+    ports:
+      - "9443:9443"   # Publisher & DevPortal
+      - "8243:8243"   # Gateway HTTPS
+      - "8280:8280"   # Gateway HTTP
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
+    volumes:
+      - wso2_data:/home/wso2carbon/wso2am-4.3.0
+    networks:
+      - laravel
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "https://localhost:9443/publisher"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  wso2_data:
+    driver: local

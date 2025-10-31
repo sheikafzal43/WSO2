@@ -1,0 +1,73 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-ChmUcRR4.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.tsx": {
+    "file": "assets/app-Bwj0rBx-.js",
+    "name": "app",
+    "src": "resources/js/app.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/pages/admin-login.tsx",
+      "resources/js/pages/admin.tsx",
+      "resources/js/pages/donate.tsx",
+      "resources/js/pages/welcome.tsx"
+    ],
+    "css": [
+      "assets/app-ChmUcRR4.css"
+    ]
+  },
+  "resources/js/pages/admin-login.tsx": {
+    "file": "assets/admin-login-DaHx19Fm.js",
+    "name": "admin-login",
+    "src": "resources/js/pages/admin-login.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ],
+    "css": [
+      "assets/app-ChmUcRR4.css"
+    ]
+  },
+  "resources/js/pages/admin.tsx": {
+    "file": "assets/admin-6BLUZPII.js",
+    "name": "admin",
+    "src": "resources/js/pages/admin.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ],
+    "css": [
+      "assets/app-ChmUcRR4.css"
+    ]
+  },
+  "resources/js/pages/donate.tsx": {
+    "file": "assets/donate-DGI1Ef7v.js",
+    "name": "donate",
+    "src": "resources/js/pages/donate.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ],
+    "css": [
+      "assets/app-ChmUcRR4.css"
+    ]
+  },
+  "resources/js/pages/welcome.tsx": {
+    "file": "assets/welcome-CXDXuzXD.js",
+    "name": "welcome",
+    "src": "resources/js/pages/welcome.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ],
+    "css": [
+      "assets/app-ChmUcRR4.css"
+    ]
+  }
+}
